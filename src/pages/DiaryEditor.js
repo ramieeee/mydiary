@@ -1,29 +1,33 @@
-import React, {useRef, useState} from "react";
+import React, { useEffect, useRef, useState } from "react";
 
-function DiaryEditor({onCreate}) {
+function DiaryEditor({ onCreate }) {
+  useEffect(() => {
+    console.log("DiaryEditor render");
+  });
+
   const authorInput = useRef();
   const contentInput = useRef();
 
   const [state, setState] = useState({
     author: "",
     content: "",
-    emotion: 1
-})
+    emotion: 1,
+  });
 
   const handleChangeState = (e) => {
     setState({
       ...state,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
-  }
+  };
 
   const handleSubmit = () => {
-    if(state.author.length < 1) {
+    if (state.author.length < 1) {
       authorInput.current.focus();
       return;
     }
 
-    if(state.content.length < 5) {
+    if (state.content.length < 5) {
       contentInput.current.focus();
       return;
     }
@@ -33,24 +37,34 @@ function DiaryEditor({onCreate}) {
       author: "",
       content: "",
       emotion: 1,
-    })
-  }
+    });
+  };
 
-  return(
+  return (
     <div className="DiaryEditor">
       <h2>오늘의 일기</h2>
       <div>
-        <input ref={authorInput} name="author" value={state.author}
-        onChange={handleChangeState}/>
-          
+        <input
+          ref={authorInput}
+          name="author"
+          value={state.author}
+          onChange={handleChangeState}
+        />
       </div>
       <div>
-        <textarea ref={contentInput} name="content" value={state.content}
-        onChange={handleChangeState}/>
+        <textarea
+          ref={contentInput}
+          name="content"
+          value={state.content}
+          onChange={handleChangeState}
+        />
       </div>
       <div>
-        <select name="emotion" value={state.emotion}
-          onChange={handleChangeState}>
+        <select
+          name="emotion"
+          value={state.emotion}
+          onChange={handleChangeState}
+        >
           <option value={1}>1</option>
           <option value={2}>2</option>
           <option value={3}>3</option>
@@ -65,4 +79,4 @@ function DiaryEditor({onCreate}) {
   );
 }
 
-export default DiaryEditor;
+export default React.memo(DiaryEditor); // react.memo로 묶어준 애를 export 할 수 있음
